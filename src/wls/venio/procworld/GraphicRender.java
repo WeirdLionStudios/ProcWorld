@@ -89,7 +89,6 @@ public class GraphicRender extends JPanel{
 			}
 		}
 		else{
-			System.out.println("Hello!");
 			g.drawImage(geoMap, 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
 		}
 	}

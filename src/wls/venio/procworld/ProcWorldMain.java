@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Random;
 
+import wls.venio.procworld.algs.NameGen;
 import wls.venio.procworld.world.World;
 
 public class ProcWorldMain{
