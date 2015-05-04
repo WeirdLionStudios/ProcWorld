@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class NameGen{
 	
-	static Random rand;
+	static Random rand=new Random();
 	
 	public static void setSeed(double s){
 		rand=new Random((long)(s*1000000));

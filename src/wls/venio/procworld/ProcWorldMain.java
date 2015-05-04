@@ -1,12 +1,15 @@
 package wls.venio.procworld;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Properties;
 import java.util.Random;
 
-import wls.venio.procworld.algs.NameGen;
 import wls.venio.procworld.world.World;
 
 public class ProcWorldMain{
@@ -53,7 +56,7 @@ public class ProcWorldMain{
 		System.out.println("World generated!");
 		//Init graphics
 		@SuppressWarnings("unused")
-		GraphicRender render=new GraphicRender(worldWidth, worldHeight, world.geoMap);
+		GraphicRender render=new GraphicRender(worldWidth, worldHeight, world.geoMap);	
 	}
 	/**
 	 * Load config file

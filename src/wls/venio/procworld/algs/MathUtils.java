@@ -3,6 +3,7 @@ package wls.venio.procworld.algs;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MathUtils {
 	public static double map(double val, double initMin, double initMax, double finalMin, double finalMax) {
@@ -31,5 +32,9 @@ public class MathUtils {
     	x/=poly.npoints;
     	y/=poly.npoints;
     	return new Point((int)x, (int)y);
+    }
+    
+    public static int randomInRange(int min, int max){	
+    	return new Random().nextInt(max-min)+min;	
     }
 }
