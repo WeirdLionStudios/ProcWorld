@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class NameGen{
 	
-	static Random rand=new Random();
+	static Random rand;
 	
 	public static void setSeed(double s){
 		rand=new Random((long)(s*1000000));
@@ -80,6 +80,10 @@ public class NameGen{
 	}
 	
 	public static String generateName(){
+		if(rand==null){
+			System.err.println("Must set the NameGen seed before using it!");
+			System.exit(0);
+		}
 		String str="";
 		
 		int len=rand.nextInt(2)+2;

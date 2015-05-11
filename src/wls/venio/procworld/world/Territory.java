@@ -1,18 +1,12 @@
 package wls.venio.procworld.world;
 
 import java.awt.Point;
-import java.awt.Polygon;
+import java.util.ArrayList;
 
 public class Territory{
-	public int neigh[];
-	public Polygon poly;
-	
-	int x;
-	int y;
+	public Point pos;
 	
 	public Territory(Point p){	
-		x=p.x;
-		y=p.y;	
+		pos=p;
 	}
-
 }

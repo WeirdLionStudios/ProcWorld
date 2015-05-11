@@ -2,11 +2,6 @@ package wls.venio.procworld.world;
 
 import java.awt.Polygon;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +9,7 @@ import java.util.Random;
 import wls.venio.procworld.GraphicRender;
 import wls.venio.procworld.algs.MathUtils;
 import wls.venio.procworld.algs.NameGen;
+import wls.venio.procworld.algs.NeighbourNet;
 import wls.venio.procworld.algs.PointSet;
 import wls.venio.procworld.algs.PolygonBuilder;
 import wls.venio.procworld.algs.ProcWorldLevelMapping;
@@ -25,10 +21,17 @@ public class World{
 	int curYear=0;
 	
 	Geography worldGeo;
-	Polygon[] poligons;
+	//L0, just raw and uninteresting data
+	Polygon[] polygons;
+	//L1, abstraction from L0 (plus some info)
 	Territory[] territories;
+	NeighbourNet adjTerrs;
+	//L2, grouping of L1 members
 	City[] cities;
+	NeighbourNet adjCities;
+	//L3, grouping of L2 members
 	Nation[] nations;
+	NeighbourNet adjNations;
 	
 	//Misc values for world generation
 	private int numNations, numCities, numTerritories, lightDir;
@@ -53,6 +56,8 @@ public class World{
 		seaLevel=sea;
 		seed=s;
 		
+		adjTerrs=new NeighbourNet(cityNum*10);
+		
 		cities=new City[cityNum];
 		nations=new Nation[natNum];
 		
@@ -74,40 +79,34 @@ public class World{
 		System.out.println("Generated geomap in "+(System.nanoTime()-lastTimeRecorded)/1000000+"ms");
 		//Generate political subdivision in territories
 		generateTerritories(width, height);
-		generateCities();
 		//Subdivide in cities and then nations
-		
+		//generateCities();
 	}
 	
 	private void generateCities(){
 		ArrayList<Integer> chosen=new ArrayList<Integer>();
 		Random rand=new Random((long)(seed*1000000));
 		Polygon cur;
-		String print="";
+		NameGen.setSeed(seed);
 		int n;
 		for(int i=0;i<numCities;i++){
-			n=rand.nextInt(numTerritories);
-			cur=territories[n].poly;
+			//Find random territory
+			do
+				n=rand.nextInt(numTerritories);
+			while(chosen.contains(n));
+			//Generate a city on it
+			cur=polygons[n];
 			cities[i]=new City(MathUtils.getCentroid(cur));
 			chosen.add(n);
 			
 			cities[i].name=NameGen.generateName();
 			cities[i].pop=MathUtils.randomInRange(10000, 2000000);
 			
-			print+=cities[i].name+" || "+cities[i].pop+"\n";
+			System.out.println(cities[i].name+" || "+cities[i].pop);
 		}
-		//just printing to file to test, removable
-		Writer writer = null;
-
-		try {
-		    writer = new BufferedWriter(new OutputStreamWriter(
-		          new FileOutputStream("logCities.txt"), "utf-8"));
-		    writer.write(print);
-		} catch (IOException ex) {} 
-		finally {try {writer.close();} catch (Exception ex) {}}
 	}
 	
-	//Generate the poly array
+	//Generate the poly array and territories
 	private void generateTerritories(int w, int h){
 		int terrNum=numTerritories;
 		territories=new Territory[terrNum];
@@ -129,10 +128,16 @@ public class World{
 		List<GraphEdge> edges=new Voronoi(0).generateVoronoi(points.getX(), points.getY(),0, w, 0, h);
 		PolygonBuilder polyBuilder=new PolygonBuilder(terrNum);
 		GraphicRender.setEdgeList(edges);
-		poligons=polyBuilder.buildPolys(edges);
-		for(int i=0;i<terrNum;i++){
-			territories[i]=new Territory(MathUtils.getCentroid(poligons[i]));
-			territories[i].poly=poligons[i];
-		}
+		polygons=polyBuilder.buildPolys(edges);
+		
+		//territory[i] has polygon polygon[i]
+		for(int i=0;i<terrNum;i++)
+			territories[i]=new Territory(MathUtils.getCentroid(polygons[i]));
+		//Doing some neighbouring between territories
+		adjTerrs=new NeighbourNet(terrNum);
+		for(GraphEdge edge:edges)
+			adjTerrs.addNeighbour(edge.site1, edge.site2);
+		//Display the stuff!
+		GraphicRender.setTerritories(territories, adjTerrs);
 	}
 }
