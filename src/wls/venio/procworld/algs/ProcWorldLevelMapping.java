@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * 
  * @author Daniele
  *
- *	Mapping between political subdivision level implemented as a table that points to the objects
- *
+ *	Mapping between political subdivision level implemented as an array that points to the objects
+ *	INDEX		| VALUE
  *	.-----------------------.
  *	| low_0		| high_n	|
  *	|			.			|
@@ -18,12 +18,16 @@ import java.util.ArrayList;
  */
 
 public class ProcWorldLevelMapping{
-	int[] map;
+	private int[] map;
 	public ProcWorldLevelMapping(int size){
 		map=new int[size];
 		for(int i=0;i<size;i++){
 			map[i]=-1;
 		}
+	}
+	
+	public int getSize(){
+		return map.length;
 	}
 	
 	void addMapping(int a, int b){
