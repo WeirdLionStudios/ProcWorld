@@ -1,20 +1,14 @@
 package wls.venio.procworld.world;
 
-import java.awt.Point;
-
 public class City extends Level{
 	public int id;
 	public String name;
 	public int pop;
-	public int[] territories;
-	public int[] neigh;
 	
-	int x;
-	int y;
+	int mainTerritory;
 	
-	public City(Point p){
-		x=p.x;
-		y=p.y;
+	public City(int t){
+		mainTerritory=t;
 		level=2;
 	}
 }

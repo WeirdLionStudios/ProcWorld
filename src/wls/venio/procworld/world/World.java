@@ -1,5 +1,6 @@
 package wls.venio.procworld.world;
 
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class World{
 			while(chosen.contains(n));
 			//Generate a city on it
 			cur=polygons[n];
-			cities[i]=new City(MathUtils.getCentroid(cur));
+			cities[i]=new City(n);
 			chosen.add(n);
 			
 			cities[i].name=NameGen.generateName();
@@ -139,5 +140,9 @@ public class World{
 			adjTerrs.addNeighbour(edge.site1, edge.site2);
 		//Display the stuff!
 		GraphicRender.setTerritories(territories, adjTerrs);
+	}
+	
+	public Point getCityPos(int n){
+		return territories[cities[n].mainTerritory].pos;
 	}
 }

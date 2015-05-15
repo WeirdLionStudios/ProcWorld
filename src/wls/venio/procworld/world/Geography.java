@@ -58,7 +58,7 @@ public class Geography{
 				}
 			}
 		}
-		//LEGACY
+		//LEGACY, to be examined since it had much better performance (half the execution time!)
 		/*for (int x = 0; x < worldWidth; ++x) {
             for (int y = 0; y < worldHeight; ++y) {
                 if (!(heightMap[x][y]<seaLevel || x == 0 || y == 0 || heightMap[x - 1][y - 1] <= heightMap[x][y])) {
