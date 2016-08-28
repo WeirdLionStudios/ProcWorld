@@ -21,8 +21,8 @@ public class GraphicRender extends JPanel{
 	
 	private static final long serialVersionUID = 9163581865474010335L;
 	
-	static final int FRAME_WIDTH=800;
-	static final int FRAME_HEIGHT=700;
+	static int FRAME_WIDTH=800;
+	static int FRAME_HEIGHT=700;
 	
 	JFrame frame=new JFrame("ProcWorld - v1.0");
 	Dimension screen=Toolkit.getDefaultToolkit().getScreenSize();
@@ -53,6 +53,9 @@ public class GraphicRender extends JPanel{
 		worldWidth=w;
 		worldHeight=h;
 		geoMap=shadows;
+		
+		FRAME_WIDTH=w;
+		FRAME_HEIGHT=h;
 		
 		dx=FRAME_WIDTH/w;
 		dy=FRAME_HEIGHT/h;
@@ -92,11 +95,11 @@ public class GraphicRender extends JPanel{
 	
 	@Override
 	protected void paintComponent(Graphics g){
-		/**
+		
 		g.setColor(Color.GREEN);
 		g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
 		g.drawImage(geoMap, 0, 0, FRAME_WIDTH, FRAME_HEIGHT, null);
-		**/
+		
 		//DEBUG ONLY!!!
 		
 		g.setColor(Color.BLACK);
@@ -111,7 +114,6 @@ public class GraphicRender extends JPanel{
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -126,6 +128,7 @@ public class GraphicRender extends JPanel{
 				for(int j:adjacent)
 					g.drawLine(territories[i].pos.x, territories[i].pos.y, territories[j].pos.x, territories[j].pos.y);
 				g.fillRect(territories[i].pos.x, territories[i].pos.y, 5, 5);
+				g.setColor(Color.RED);
 			}
 		}
 	}

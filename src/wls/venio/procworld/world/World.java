@@ -37,7 +37,7 @@ public class World{
 	//Misc values for world generation
 	private int numNations, numCities, numTerritories, lightDir;
 	private float shadowThick;
-	private double allyProb, enemyProb, seaLevel, seed;
+	private double allyProb, enemyProb, seaLevel, seed, minDist;
 	
 	//Geography generation results
 	public double[][] heightMap;
@@ -46,16 +46,17 @@ public class World{
 	//Political subdivision
 	ProcWorldLevelMapping terrToCity, cityToNat;
 	
-	public World(int cityNum, int natNum, double ally, double enemy, int light, float shadow, double sea, double s){
-		allyProb=ally;
-		enemyProb=enemy;
-		numTerritories=cityNum*10;
-		numCities=cityNum;
-		numNations=natNum;
-		lightDir=light;
-		shadowThick=shadow;
-		seaLevel=sea;
-		seed=s;
+	public World(int cityNum, int natNum, double ally, double enemy, int light, float shadow, double sea, double s, double minDist){
+		this.allyProb=ally;
+		this.enemyProb=enemy;
+		this.numTerritories=cityNum*10;
+		this.numCities=cityNum;
+		this.numNations=natNum;
+		this.lightDir=light;
+		this.shadowThick=shadow;
+		this.seaLevel=sea;
+		this.seed=s;
+		this.minDist=minDist;
 		
 		adjTerrs=new NeighbourNet(cityNum*10);
 		
@@ -115,10 +116,11 @@ public class World{
 		//Generate points
 		Random rand=new Random((long)(seed*1000000));
 		int x, y;
+		//Random point, if it is underwater or too close to other points try again
 		for(int i=0;i<terrNum;i++){
 			x=rand.nextInt(w);
 			y=rand.nextInt(h);
-			if(heightMap[x][y]<seaLevel||points.contains(x, y)){
+			if(heightMap[x][y]<=seaLevel||points.contains(x, y)||points.getMinDist(new Point(x, y))<minDist){
 				i--;
 				continue;
 			}
@@ -133,7 +135,8 @@ public class World{
 		
 		//territory[i] has polygon polygon[i]
 		for(int i=0;i<terrNum;i++)
-			territories[i]=new Territory(MathUtils.getCentroid(polygons[i]));
+			//territories[i]=new Territory(MathUtils.getCentroid(polygons[i]));
+			territories[i]=new Territory(points.getPoint(i));
 		//Doing some neighbouring between territories
 		adjTerrs=new NeighbourNet(terrNum);
 		for(GraphEdge edge:edges)

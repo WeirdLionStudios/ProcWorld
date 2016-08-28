@@ -22,6 +22,8 @@ public class ProcWorldMain{
 	public static int numCities;
 	public static int numNations;
 	
+	public static double minDistance;
+	
 	public static double allyProb;
 	public static double enemyProb;
 	
@@ -50,7 +52,7 @@ public class ProcWorldMain{
 			System.exit(0);
 		}
 		//Init world and generate
-		World world=new World(numCities, numNations, allyProb, enemyProb, lightDir, shadowThickness, seaLevel, seed);
+		World world=new World(numCities, numNations, allyProb, enemyProb, lightDir, shadowThickness, seaLevel, seed, minDistance);
 		System.out.println("Starting world generation...");
 		world.generateWorld(worldWidth, worldHeight, scale);
 		System.out.println("World generated!");
@@ -86,5 +88,6 @@ public class ProcWorldMain{
 		seaLevel=Double.parseDouble(prop.getProperty("sea_level"));
 		lightDir=Integer.parseInt(prop.getProperty("light_dir"));
 		shadowThickness=Float.parseFloat(prop.getProperty("shadow_thick"));
+		minDistance=Float.parseFloat(prop.getProperty("min_point_distance"));
 	}
 }
